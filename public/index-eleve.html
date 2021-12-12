@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Calculateur de sous-réseau</title>
+    
+    <style type="text/css">
+
+      /* vos css ici */
+
+    </style>
+  </head>
+
+ <body>
+  <h1>Calculateur de sous-réseau - IP CIDR</h1>
+
+    <!--  vos balisme HTML ici -->
+   
+    <script>
+      /***  fonctions de dialogue avec l'application externe
+      * NE PAS MODIFIER
+      ****/
+          document.getElementById('submit').addEventListener("click", fire);
+   
+          function fire() {
+          const  ip_cidr = document.getElementById('ip').value;
+          const ip = ip_cidr.split('/');
+          const api_url = `api/${ip[0]},${ip[1]}`;
+          document.getElementById('submitted').style.display = 'block';
+           document.getElementById('submitted').textContent = ip_cidr;
+          console.log(api_url)
+          fetch(api_url) 
+                .then(response => response.json())
+                .then(json => display(json))
+        }
+
+      function display(data) {
+        console.log(data);
+         document.getElementById('masque').value=data.subnet_mask;
+         document.getElementById('masque2').value=data.wildcard_mask;
+         document.getElementById('first').value=data.first_assignable_host;
+         document.getElementById('last').value=data.last_assignable_host;
+         document.getElementById('ad-reseau').value=data.network_address;
+         document.getElementById('ad-diffusion').value=data.broadcast_address;
+         document.getElementById('bits-reseau').value=data.subnet_bits;
+         document.getElementById('nb-hotes').value=data.assignable_hosts;
+      }
+    </script>
+  </body>
+
+</html>
