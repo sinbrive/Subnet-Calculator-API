@@ -1,5 +1,3 @@
-# CALC-IP-REST-API
+# Subnet-Calculator-API
 
-My own REST API for subnet calculation
-
-knowledge : include fil in server file (serveur.js) with export
+idea inspired from here : https://networkcalc.com/subnet-calculator
