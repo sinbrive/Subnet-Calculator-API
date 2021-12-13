@@ -13,23 +13,20 @@ function calcIP(data) {
 	var inputip = ipmask[0];
 	var inputcidr = ipmask[1];
 
-	if (checkInput(inputip)==false || !(inputcidr >= 1 && inputcidr <=24)) {
+	var hostid = 32-parseInt(inputcidr);
+
+	if (checkInput(inputip)==false || !(hostid >= 1 && hostid <=24)) {
 		inputip="192.168.1.1";
 		inputcidr = "31";
-		console.log(inputcidr);
+		hostid=1;
 	}
 
 	var ret={}
+
 	ret['cidr_notation'] =inputip+'/'+inputcidr;
 
-	var x = 32-parseInt(inputcidr);
-
-	if (x >= 1 && x <=24) {
-
-		inputmask=toIP(0xFFFFFFFF << x);
-		wildcard_mask = toIP(~(0xFFFFFFFF << x));
-	}
-
+	var inputmask =toIPString(0xFFFFFFFF << hostid);
+	var wildcard_mask = toIPString(~(0xFFFFFFFF << hostid));
 
 	ret['subnet_mask'] =inputmask;
 	ret['wildcard_mask'] =wildcard_mask;
@@ -57,29 +54,29 @@ function calcIP(data) {
 	
 	// network address
 	var adrN = IP & mask;
-	ret['network_address'] = toIP(adrN);
+	ret['network_address'] = toIPString(adrN);
 
 	// first address
 	var adrFirst = adrN + 1;
-	ret['first_assignable_host']  = toIP(adrFirst);
+	ret['first_assignable_host']  = toIPString(adrFirst);
 
 	// boroadcast address
 	var adrDiff = adrN | ~mask;
-	ret['broadcast_address']  = toIP(adrDiff);
+	ret['broadcast_address']  = toIPString(adrDiff);
 
 	// last address
 	var adrLast = adrDiff - 1;
-	ret['last_assignable_host']  = toIP(adrLast);
+	ret['last_assignable_host']  = toIPString(adrLast);
 
 	// hosts number
-	var nb = Math.pow(2, CIDR) - 2;
+	var nb = (0x0001 << CIDR ) - 2;  
 	ret['assignable_hosts'] = nb;
 
 	return ret;
 }
 
 
-function toIP(data) {
+function toIPString(data) {
 	return (data >> 24 & 0xFF).toString() + "." +
 		(data >> 16 & 0xFF).toString() + "." + (data >> 8 & 0xFF).toString() + "." + (data & 0xFF).toString();
 }
