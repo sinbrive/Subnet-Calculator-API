@@ -1,8 +1,8 @@
 
 module.exports = {
-    ret: function(data) {
-        return calcIP(data);
-    }
+	ret: function(data) {
+		return calcIP(data);
+	}
 };
 
 
@@ -10,10 +10,13 @@ function calcIP(data) {
 
 	const ipmask = data.split(',');
 
+
 	var inputip = ipmask[0];
 	var inputcidr = ipmask[1];
 
 	var hostid = 32-parseInt(inputcidr);
+
+	console.log(inputip);
 
 	if (checkInput(inputip)==false || !(hostid >= 1 && hostid <=24)) {
 		inputip="192.168.1.1";
@@ -78,17 +81,25 @@ function calcIP(data) {
 
 function toIPString(data) {
 	return (data >> 24 & 0xFF).toString() + "." +
-		(data >> 16 & 0xFF).toString() + "." + (data >> 8 & 0xFF).toString() + "." + (data & 0xFF).toString();
+	(data >> 16 & 0xFF).toString() + "." + (data >> 8 & 0xFF).toString() + "." + (data & 0xFF).toString();
 }
 
 
 function checkInput(ipp) {
-	var expectedChars = "0123456789.";
-	var dot = 0;
-	var i = 0;
-	for (i = 0; i < ipp.length; i++) {
-		if (expectedChars.indexOf(ipp.charAt(i)) === -1) break;
-		if (ipp.charAt(i) == '.') dot++;
-	}
-	return (dot == 3) && (i == ipp.length);
+		if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipp))
+		{
+			return (true)
+		}
+		console.log("wrong address")
+		return (false)
+
+	// return reg.test(ipp);
+	// var expectedChars = "0123456789.";
+	// var dot = 0;
+	// var i = 0;
+	// for (i = 0; i < ipp.length; i++) {
+	// 	if (expectedChars.indexOf(ipp.charAt(i)) === -1) break;
+	// 	if (ipp.charAt(i) == '.') dot++;
+	// }
+	// return (dot == 3) && (i == ipp.length);
 }
